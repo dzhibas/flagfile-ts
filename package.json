@@ -1,0 +1,22 @@
+{
+  "name": "flagfile-ts",
+  "version": "1.0.0",
+  "description": "TypeScript library for parsing and evaluating feature flag files",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "dev": "tsc --watch"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^18.15.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": ["feature-flags", "typescript", "parser"],
+  "author": "",
+  "license": "MIT"
+}

@@ -32,6 +32,8 @@ export enum TokenType {
   RIGHT_BRACE = 'RIGHT_BRACE',   // }
   LEFT_PAREN = 'LEFT_PAREN',     // (
   RIGHT_PAREN = 'RIGHT_PAREN',   // )
+  LEFT_BRACKET = 'LEFT_BRACKET', // [
+  RIGHT_BRACKET = 'RIGHT_BRACKET', // ]
   COMMA = 'COMMA',               // ,
   COLON = 'COLON',               // :
   
@@ -67,4 +69,138 @@ export interface Position {
   line: number;
   column: number;
   index: number;
+}
+
+/**
+ * Base AST Node interface
+ */
+export interface ASTNode {
+  type: string;
+  position: Position;
+}
+
+/**
+ * Literal value types
+ */
+export type LiteralValue = boolean | number | string | object | Date;
+
+/**
+ * AST Node types for the feature flag language
+ */
+
+export interface Program extends ASTNode {
+  type: 'Program';
+  features: FeatureFlag[];
+}
+
+export interface FeatureFlag extends ASTNode {
+  type: 'FeatureFlag';
+  name: string;
+  body: FeatureFlagBody;
+}
+
+export type FeatureFlagBody = SimpleFeatureFlag | ComplexFeatureFlag;
+
+export interface SimpleFeatureFlag extends ASTNode {
+  type: 'SimpleFeatureFlag';
+  value: Expression;
+}
+
+export interface ComplexFeatureFlag extends ASTNode {
+  type: 'ComplexFeatureFlag';
+  rules: Rule[];
+  defaultValue?: Expression;
+}
+
+export interface Rule extends ASTNode {
+  type: 'Rule';
+  condition: Expression;
+  value: Expression;
+}
+
+export type Expression = 
+  | BooleanLiteral
+  | NumberLiteral
+  | StringLiteral
+  | DateLiteral
+  | Identifier
+  | JsonExpression
+  | NowExpression
+  | BinaryExpression
+  | UnaryExpression
+  | ArrayExpression
+  | GroupedExpression;
+
+export interface BooleanLiteral extends ASTNode {
+  type: 'BooleanLiteral';
+  value: boolean;
+}
+
+export interface NumberLiteral extends ASTNode {
+  type: 'NumberLiteral';
+  value: number;
+}
+
+export interface StringLiteral extends ASTNode {
+  type: 'StringLiteral';
+  value: string;
+}
+
+export interface DateLiteral extends ASTNode {
+  type: 'DateLiteral';
+  value: string; // ISO date string
+}
+
+export interface Identifier extends ASTNode {
+  type: 'Identifier';
+  name: string;
+}
+
+export interface JsonExpression extends ASTNode {
+  type: 'JsonExpression';
+  value: object;
+}
+
+export interface NowExpression extends ASTNode {
+  type: 'NowExpression';
+}
+
+export interface BinaryExpression extends ASTNode {
+  type: 'BinaryExpression';
+  left: Expression;
+  operator: BinaryOperator;
+  right: Expression;
+}
+
+export interface UnaryExpression extends ASTNode {
+  type: 'UnaryExpression';
+  operator: UnaryOperator;
+  operand: Expression;
+}
+
+export interface ArrayExpression extends ASTNode {
+  type: 'ArrayExpression';
+  elements: Expression[];
+}
+
+export interface GroupedExpression extends ASTNode {
+  type: 'GroupedExpression';
+  expression: Expression;
+}
+
+export type BinaryOperator = 
+  | '==' | '!=' | '=' 
+  | '>' | '<' | '>=' | '<=' 
+  | 'and' | 'or' | 'in';
+
+export type UnaryOperator = 'not';
+
+/**
+ * Parser error class
+ */
+export class ParseError extends Error {
+  constructor(message: string, public position: Position) {
+    super(message);
+    this.name = 'ParseError';
+  }
 }

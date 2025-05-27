@@ -63,6 +63,12 @@ export class Scanner {
       case ')':
         this.addToken(TokenType.RIGHT_PAREN, char, startLine, startColumn, start);
         break;
+      case '[':
+        this.addToken(TokenType.LEFT_BRACKET, char, startLine, startColumn, start);
+        break;
+      case ']':
+        this.addToken(TokenType.RIGHT_BRACKET, char, startLine, startColumn, start);
+        break;
       case ',':
         this.addToken(TokenType.COMMA, char, startLine, startColumn, start);
         break;

@@ -10,7 +10,7 @@ FF-basic-off -> false
 FF-json-feature -> json({"enabled": true, "variant": "A"})
 
 // Complex feature flag with rules
-FF-country-feature {
+FF_country_feature {
     countryCode == "NL" -> json({"enabled": true, "message": "Welcome Dutch user!"})
     countryCode == "US" -> json({"enabled": true, "message": "Welcome American user!"})
     false
